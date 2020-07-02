@@ -6,7 +6,8 @@ output:
     orientation: rows
     social: menu
     source_code: embed
-    vertical_layout: fill    
+    vertical_layout: fill
+    theme: lumen
 ---
 ```{r setup, include=FALSE}
 #-------------------- Paquetes --------------------
@@ -21,7 +22,7 @@ library(leaflet)
 
 #-------------------- Colores ---------------------
 
-color_positivos <- 'blue'
+color_positivos <- 'darkblue'
 color_activos <- 'darkred'
 color_recuperados <- 'green'
 color_fallecidos <- 'grey'
