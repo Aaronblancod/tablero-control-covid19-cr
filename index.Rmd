@@ -34,18 +34,19 @@ color_salon <- 'lightblue'
 color_uci <- 'lightblue'
 
 #--------------------- Íconos ---------------------
-icono_positivos <- 'fas fa-user-md'
-icono_activos <- 'fas fa-user-md'
-icono_recuperados <- 'fas fa-user-md'
-icono_fallecidos <- 'fas fa-user-md'
-icono_mujeres <- 'fas fa-user-md'
-icono_hombres <- 'fas fa-user-md'
-icono_menor <- 'fas fa-user-md'
-icono_adultom <- 'fas fa-user-md'
+icono_positivos <- 'fa fa-user-plus'
+icono_activos <- 'fa fa-user-circle-o'
+icono_recuperados <- 'fa fa-user'
+icono_fallecidos <- 'fa fa-user-times'
+icono_mujeres <- 'ion-woman'
+icono_hombres <- 'ion-man'
+icono_menor <- 'ion-ios-people'
+icono_adulto <- 'ion-ios-people'
+icono_adultom <- 'ion-ios-people'
 icono_nuevos_positivos <- 'fas fa-user-md'
-icono_hospitalizados <- 'fas fa-user-md'
-icono_salon <- 'fas fa-user-md'
-icono_uci <- 'fas fa-user-md'
+icono_hospitalizados <- 'fa fa-hospital-o'
+icono_salon <- 'ion-ios-medkit'
+icono_uci <- 'ion-ios-pulse'
 
 #--------------- Otros parámetros -----------------
 
@@ -178,9 +179,9 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark =
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), " (",
                        round(100 * df_general_pais_ultima_fecha$activos / df_general_pais_ultima_fecha$positivos, 1), 
-                       "%)", sep = ""), 
+                       "%, +40)", sep = ""), 
          caption = "Total de casos activos",
-         icon = icono_positivos, 
+         icon = icono_activos, 
          color = color_activos
 )
 ```
@@ -191,7 +192,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark
                        round(100 * df_general_pais_ultima_fecha$RECUPERADOS / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos recuperados",
-         icon = icono_positivos, 
+         icon = icono_recuperados, 
          color = color_recuperados
 )
 ```
@@ -202,7 +203,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark 
                        round(100 * df_general_pais_ultima_fecha$fallecidos / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de casos fallecidos",
-         icon = icono_positivos, 
+         icon = icono_fallecidos, 
          color = color_fallecidos
 )
 ```
@@ -336,7 +337,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_posi, big.mark 
 valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_posi, big.mark = ","), "(",                          round(100 * df_general_pais_ultima_fecha$adul_posi / df_general_pais_ultima_fecha$positivos, 1), 
                        "%)", sep = ""), 
          caption = "Total de adultos", 
-         icon = icono_positivos,
+         icon = icono_adulto,
          color = color_positivos)
 ```
 
@@ -441,7 +442,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_acti, big.mark 
 valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_acti, big.mark = ","), "(",                          round(100 * df_general_pais_ultima_fecha$adul_acti / df_general_pais_ultima_fecha$activos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Adultos", 
-         icon = icono_activos,
+         icon = icono_adulto,
          color = color_activos
 )
 ```
@@ -548,7 +549,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$MENOR_RECUP, big.mark
 valueBox(value = paste(format(df_general_pais_ultima_fecha$ADUL_RECUP, big.mark = ","), "(",                          round(100 * df_general_pais_ultima_fecha$ADUL_RECUP / df_general_pais_ultima_fecha$RECUPERADOS, 1), 
                        "%)", sep = ""), 
          caption = "Total de Adultos", 
-         icon = icono_recuperados,
+         icon = icono_adulto,
          color = color_recuperados
 )
 ```
@@ -655,7 +656,7 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$menor_fall, big.mark 
 valueBox(value = paste(format(df_general_pais_ultima_fecha$adul_fall, big.mark = ","), "(",                          round(100 * df_general_pais_ultima_fecha$adul_fall/ df_general_pais_ultima_fecha$fallecidos, 1), 
                        "%)", sep = ""), 
          caption = "Total de Adultos", 
-         icon = icono_fallecidos,
+         icon = icono_adulto,
          color = color_fallecidos
 )
 ```
