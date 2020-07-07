@@ -362,7 +362,7 @@ mutate(canton = factor(canton, levels = canton)) %>%
 top_n(n = 10, wt = positivos) %>%  
 plot_ly(x = ~ canton, y = ~ positivos, type = "bar", text = ~ positivos, textposition = 'auto',
         marker = list(color = color_positivos)) %>%
-layout(yaxis = list(title = "Cantidad de casos positivos"), xaxis = list(title = ""),
+layout(yaxis = list(title = "Cantidad de casos positivos"), xaxis = list(title = "Cantones"),
        margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2))%>%
 config(locale = "es")
 ```
