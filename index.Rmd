@@ -4,14 +4,14 @@ author: "por Aaron Blanco"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
-    social: menu
     source_code: embed
     vertical_layout: fill
-    theme: lumen
+css: Theme.css
+#    theme: lumen
 ---
 ```{r setup, include=FALSE}
 #-------------------- Paquetes --------------------
-
+library(knitr)
 library(flexdashboard)
 library(plotly)
 library(dygraphs)
