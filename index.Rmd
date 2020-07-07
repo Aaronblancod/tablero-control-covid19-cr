@@ -1,13 +1,12 @@
 ---
 title: "Estado del COVID-19 en Costa Rica"
-author: "por Aaron Blanco"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
     source_code: embed
     vertical_layout: fill
-css: Theme.css
-#    theme: lumen
+#css: Theme1.css
+    theme: lumen
 ---
 ```{r setup, include=FALSE}
 #-------------------- Paquetes --------------------
