@@ -22,20 +22,19 @@ library(leaflet)
 
 #-------------------- Colores ---------------------
 
-color_positivos <- 'darkblue'
-color_activos <- 'darkred'
-color_recuperados <- 'green'
-color_fallecidos <- 'grey'
-
-color_nuevos_positivos <- 'lightblue'
-
-color_hospitalizados <- 'lightblue'
-color_salon <- 'lightblue'
-color_uci <- 'lightblue'
+color_positivos <- 'steelblue'
+color_activos <- 'firebrick'
+color_recuperados <- 'darkolivegreen'
+color_fallecidos <- 'dimgray'
+color_nuevos_positivos <- 'steelblue'
+color_hospitalizados <- 'tan'
+color_salon <- 'tan'
+color_uci <- 'tan'
 
 #--------------------- Íconos ---------------------
 icono_positivos <- 'fa fa-user-plus'
-icono_activos <- 'fa fa-user-circle-o'
+icono_activos <- 'fas fa-diagnoses'
+#fa fa-user-circle-o
 icono_recuperados <- 'fa fa-user'
 icono_fallecidos <- 'fa fa-user-times'
 icono_mujeres <- 'ion-woman'
@@ -45,7 +44,7 @@ icono_adulto <- 'ion-ios-people'
 icono_adultom <- 'ion-ios-people'
 icono_nuevos_positivos <- 'fas fa-user-md'
 icono_hospitalizados <- 'fa fa-hospital-o'
-icono_salon <- 'ion-ios-medkit'
+icono_salon <- 'fa fa-hospital-o'
 icono_uci <- 'ion-ios-pulse'
 
 #--------------- Otros parámetros -----------------
@@ -55,12 +54,12 @@ caracter_separador <- ','
 
 #--------------- Archivos de datos ----------------
 
-archivo_general_pais <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_01_CSV_GENERAL.csv'
+archivo_general_pais <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_02_CSV_GENERAL.csv'
 
-archivo_positivos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_01_CSV_POSITIVOS.csv'
-archivo_activos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_01_CSV_ACTIVOS.csv'
-archivo_recuperados_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_01_CSV_RECUP.csv'
-archivo_fallecidos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_01_CSV_FALLECIDOS.csv'
+archivo_positivos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_02_CSV_POSITIVOS.csv'
+archivo_activos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_02_CSV_ACTIVOS.csv'
+archivo_recuperados_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_02_CSV_RECUP.csv'
+archivo_fallecidos_cantones <- 'https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/covid19/ms/07_02_CSV_FALLECIDOS.csv'
 
 #---------------------- Datos generales ---------------------
 # Data frame de datos generales por país
@@ -168,18 +167,17 @@ Row
 -----------------------------------------------------------------------
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "", sep = " ", ("(+270)")),
          caption = "Total de casos positivos", 
          icon = icono_positivos, 
-         color = color_positivos
-)
+         color = color_positivos)
 ```
 
 ### Casos activos {.value-box}
 ```{r}
 valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), " (",
                        round(100 * df_general_pais_ultima_fecha$activos / df_general_pais_ultima_fecha$positivos, 1), 
-                       "%, +40)", sep = ""), 
+                       "%)", sep = ""), 
          caption = "Total de casos activos",
          icon = icono_activos, 
          color = color_activos
@@ -212,11 +210,10 @@ Row
 -----------------------------------------------------------------------
 ### Hospitalizados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$hospital, big.mark = ","), "", sep = " ", ("(+10)")),
          caption = "Total de hospitalizados", 
          icon = icono_hospitalizados,
-         color = color_hospitalizados
-)
+         color = color_hospitalizados)
 ```
 
 ### En salón {.value-box}
@@ -245,30 +242,15 @@ Row {data-width=400}
 -----------------------------------------------------------------------
 ### Gráfico de variación de las cantidades de casos en el tiempo
 ```{r}
-plot_ly(data = df_general_pais,
-                x = ~ FECHA,
-                y = ~ positivos, 
-                name = 'Positivos', 
-                type = 'scatter',
-                mode = 'lines',
-                line = list(color = color_positivos)) %>%
-  add_trace(y = ~ activos,
-                    name = 'Activos',
-                    mode = 'lines',
-                    line = list(color = color_activos)) %>%
-  add_trace(y = ~ RECUPERADOS,
-                    name = 'Recuperados',
-                    mode = 'lines',
-                    line = list(color = color_recuperados)) %>%
-  add_trace(y = ~ fallecidos,
-                    name = 'Fallecidos',
-                    mode = 'lines',
-                    line = list(color = color_fallecidos)) %>%  
-  layout(title = "",
-                 yaxis = list(title = "Cantidad de casos"),
-                 xaxis = list(title = "Fecha"),
-                 legend = list(x = 0.1, y = 0.9),
-                 hovermode = "compare")
+plot_ly(data = df_general_pais, x = ~ FECHA, y = ~ positivos,  name = 'Positivos', type = 'scatter',
+              mode = 'lines',line = list(color = color_positivos)) %>%
+  add_trace(y = ~ activos, name = 'Activos', mode = 'lines', line = list(color = color_activos)) %>%
+  add_trace(y = ~ RECUPERADOS, name = 'Recuperados', mode = 'lines', line = list(color = color_recuperados)) %>%
+  add_trace(y = ~ fallecidos, name = 'Fallecidos', mode = 'lines', line = list(color = color_fallecidos)) %>%  
+  layout(title = "", yaxis = list(title = "Cantidad de casos"), xaxis = list(title = "Fecha"), 
+        legend = list(x = 0.1, y = 0.9), hovermode = "compare") %>%
+  config(locale = "es")
+  
 ```
 
 ### Tabla de cantidades de casos en cantones
@@ -292,7 +274,8 @@ Row
 -----------------------------------------------------------------------
 ### Casos positivos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$positivos, big.mark = ","), "", sep = " ",
+         ("(+270)")),
          caption = "Total de casos positivos", 
          icon = icono_positivos, 
          color = color_positivos)
@@ -352,13 +335,14 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$am_posi, big.mark = "
 
 Row {data-width=400}
 -----------------------------------------------------------------------
-### Mapa de casos positivos en cantones
+### Mapa de casos positivos por cantones
 ```{r}
 paleta_azul <- colorBin(palette = "Blues", domain = sf_positivos_cantones_ultima_fecha$positivos, 
                         bins = 10)
 m1 <- leaflet(sf_positivos_cantones_ultima_fecha) %>% 
   fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
-  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
+  addProviderTiles(providers$Esri.WorldTopoMap, group = "Esri World TopoMap") %>%
+  addProviderTiles(providers$CartoDB.DarkMatter, group = "CartoDB Dark") %>%
   addPolygons(fillColor = ~paleta_azul(positivos), stroke=T, fillOpacity = 1,
               color="black", weight=0.2, opacity= 0.5, group = "Cantones",
               popup = paste("Provincia: ", sf_positivos_cantones_ultima_fecha$provincia, "<br>",
@@ -366,10 +350,9 @@ m1 <- leaflet(sf_positivos_cantones_ultima_fecha) %>%
                             "Positivos: ", sf_positivos_cantones_ultima_fecha$positivos)) %>%
   addLegend("bottomright", pal = paleta_azul, values = ~positivos, title = "Casos positivos", 
             opacity = 1)%>%  
-  addLayersControl(
-    baseGroups = c("OpenStreetMap"), overlayGroups = c("Cantones"),
+  addLayersControl(baseGroups = c("Esri World TopoMap", "CartoDB Dark"), overlayGroups = c("Cantones"),
                    options = layersControlOptions(collapsed = TRUE))%>%  
-  addMiniMap( toggleDisplay = TRUE, position = "bottomleft", tiles = providers$OpenStreetMap.Mapnik)
+  addMiniMap(toggleDisplay = TRUE, tiles = providers$Esri.WorldImagery, position = "bottomleft")
 m1
 ```
 
@@ -380,9 +363,9 @@ mutate(canton = factor(canton, levels = canton)) %>%
 top_n(n = 10, wt = positivos) %>%  
 plot_ly(x = ~ canton, y = ~ positivos, type = "bar", text = ~ positivos, textposition = 'auto',
         marker = list(color = color_positivos)) %>%
-layout(yaxis = list(title = "Cantidad de casos positivos"),
-       xaxis = list(title = ""),
-       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2))
+layout(yaxis = list(title = "Cantidad de casos positivos"), xaxis = list(title = ""),
+       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2))%>%
+config(locale = "es")
 ```
 
 Casos activos
@@ -395,11 +378,11 @@ Row
 -----------------------------------------------------------------------
 ### Casos activos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$activos, big.mark = ","), "", sep = " ",
+         ("(+196)")),
          caption = "Total de casos activos", 
          icon = icono_activos, 
-         color = color_activos
-)
+         color = color_activos)
 ```
 
 ### Casos mujeres {.value-box}
@@ -459,13 +442,14 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$am_acti, big.mark = "
 
 Row {data-width=400}
 -----------------------------------------------------------------------
-### Mapa de casos activos en cantones
+### Mapa de casos activos por cantones
 ```{r}
 paleta_roja <- colorBin(palette = "Reds", 
                         domain = sf_activos_cantones_ultima_fecha$activos, bins = 10)
 m2 <- leaflet(sf_activos_cantones_ultima_fecha) %>% 
   fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
-  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
+  addProviderTiles(providers$Esri.WorldTopoMap, group = "Esri World TopoMap") %>%
+  addProviderTiles(providers$CartoDB.DarkMatter, group = "CartoDB Dark") %>%
   addPolygons(fillColor = ~paleta_roja (activos), stroke=T, fillOpacity = 1,
               color="black", weight=0.2, opacity= 0.5,
               group = "Cantones",
@@ -474,9 +458,9 @@ m2 <- leaflet(sf_activos_cantones_ultima_fecha) %>%
                             "Activos: ", sf_activos_cantones_ultima_fecha$activos)) %>%
   addLegend("bottomright", pal = paleta_roja, values = ~activos,
             title = "Casos activos",opacity = 1) %>%  
-  addLayersControl(baseGroups = c("OpenStreetMap"), overlayGroups = c("Cantones"),
-                   options = layersControlOptions(collapsed = TRUE)) %>%  
-  addMiniMap(toggleDisplay = TRUE, position = "bottomleft", tiles = providers$OpenStreetMap.Mapnik)
+  addLayersControl(baseGroups = c("Esri World TopoMap", "CartoDB Dark"), overlayGroups = c("Cantones"),
+                   options = layersControlOptions(collapsed = TRUE))%>% 
+  addMiniMap(toggleDisplay = TRUE, tiles = providers$Esri.WorldImagery, position = "bottomleft")
 m2
 ```
 
@@ -487,9 +471,9 @@ mutate(canton = factor(canton, levels = canton)) %>%
 top_n(n = 10, wt = activos) %>%  
 plot_ly(x = ~ canton, y = ~ activos, type = "bar", text = ~ activos, textposition = 'auto',
         marker = list(color = color_activos)) %>%
-layout(yaxis = list(title = "Cantidad de casos activos"),
-       xaxis = list(title = "Cantones"),
-       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2))
+layout(yaxis = list(title = "Cantidad de casos activos"), xaxis = list(title = "Cantones"),
+       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2))%>%
+config(locale = "es")
 ```
 
 Casos recuperados
@@ -502,7 +486,8 @@ Row
 -----------------------------------------------------------------------
 ### Casos recuperados {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$RECUPERADOS, big.mark = ","), "", sep = " ",
+         ("(+73)")),
          caption = "Total de casos recuperados", 
          icon = icono_recuperados, 
          color = color_recuperados
@@ -566,13 +551,14 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$AM_RECUP, big.mark = 
 
 Row {data-width=400}
 -----------------------------------------------------------------------
-### Mapa de casos recuperados en cantones
+### Mapa de casos recuperados por cantones
 ```{r}
 paleta_verde <- colorBin(palette = "Greens", 
                         domain = sf_recuperados_cantones_ultima_fecha$recuperados, bins = 10)
 m3 <- leaflet(sf_recuperados_cantones_ultima_fecha) %>% 
   fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
-  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
+  addProviderTiles(providers$Esri.WorldTopoMap, group = "Esri World TopoMap") %>%
+  addProviderTiles(providers$CartoDB.DarkMatter, group = "CartoDB Dark") %>%
   addPolygons(fillColor = ~paleta_verde (recuperados), stroke=T, fillOpacity = 1,
               color="black", weight=0.2, opacity= 0.5,
               group = "Cantones",
@@ -581,9 +567,9 @@ m3 <- leaflet(sf_recuperados_cantones_ultima_fecha) %>%
                             "Recuperados: ", sf_recuperados_cantones_ultima_fecha$recuperados)) %>%
   addLegend("bottomright", pal = paleta_verde, values = ~recuperados,
             title = "Casos recuperados",opacity = 1) %>%  
-  addLayersControl(baseGroups = c("OpenStreetMap"), overlayGroups = c("Cantones"),
-                   options = layersControlOptions(collapsed = TRUE)) %>%  
-  addMiniMap(toggleDisplay = TRUE, position = "bottomleft", tiles = providers$OpenStreetMap.Mapnik)
+  addLayersControl(baseGroups = c("Esri World TopoMap", "CartoDB Dark"), overlayGroups = c("Cantones"),
+                   options = layersControlOptions(collapsed = TRUE))%>% 
+  addMiniMap(toggleDisplay = TRUE, tiles = providers$Esri.WorldImagery, position = "bottomleft")
 m3
 ```
 
@@ -594,9 +580,9 @@ mutate(canton = factor(canton, levels = canton)) %>%
 top_n(n = 10, wt = recuperados) %>%  
 plot_ly(x = ~ canton, y = ~ recuperados, type = "bar", text = ~ recuperados, textposition = 'auto',
         marker = list(color = color_recuperados)) %>%
-layout(yaxis = list(title = "Cantidad de casos recuperados"),
-       xaxis = list(title = "Cantones"),
-       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2))
+layout(yaxis = list(title = "Cantidad de casos recuperados"), xaxis = list(title = "Cantones"),
+       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2)) %>%
+config(locale = "es")
 ```
 
 Casos fallecidos
@@ -609,7 +595,7 @@ Row
 -----------------------------------------------------------------------
 ### Casos fallecidos {.value-box}
 ```{r}
-valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), "", sep = " "), 
+valueBox(value = paste(format(df_general_pais_ultima_fecha$fallecidos, big.mark = ","), "", sep = " ", ("(+1)")),
          caption = "Total de casos fallecidos", 
          icon = icono_fallecidos, 
          color = color_fallecidos
@@ -673,13 +659,14 @@ valueBox(value = paste(format(df_general_pais_ultima_fecha$am_fall, big.mark = "
 
 Row {data-width=400}
 -----------------------------------------------------------------------
-### Mapa de casos fallecidos en cantones
+### Mapa de casos fallecidos por cantones
 ```{r}
 paleta_gris <- colorBin(palette = "Greys", 
                         domain = sf_fallecidos_cantones_ultima_fecha$fallecidos, bins = 10)
 m4 <- leaflet(sf_fallecidos_cantones_ultima_fecha) %>% 
   fitBounds(lng1 = -86, lng2 = -82, lat1 = 8, lat2 = 11) %>%
-  addProviderTiles(providers$OpenStreetMap.Mapnik, group = "OpenStreetMap") %>%
+  addProviderTiles(providers$Esri.WorldTopoMap, group = "Esri World TopoMap") %>%
+  addProviderTiles(providers$CartoDB.DarkMatter, group = "CartoDB Dark") %>%
   addPolygons(fillColor = ~paleta_gris (fallecidos), stroke=T, fillOpacity = 1,
               color="black", weight=0.2, opacity= 0.5,
               group = "Cantones",
@@ -688,9 +675,9 @@ m4 <- leaflet(sf_fallecidos_cantones_ultima_fecha) %>%
                             "Fallecidos: ", sf_fallecidos_cantones_ultima_fecha$fallecidos)) %>%
   addLegend("bottomright", pal = paleta_gris, values = ~fallecidos,
             title = "Casos fallecidos",opacity = 1) %>%  
-  addLayersControl(baseGroups = c("OpenStreetMap"), overlayGroups = c("Cantones"),
-                   options = layersControlOptions(collapsed = TRUE)) %>%  
-  addMiniMap(toggleDisplay = TRUE, position = "bottomleft", tiles = providers$OpenStreetMap.Mapnik)
+  addLayersControl(baseGroups = c("Esri World TopoMap", "CartoDB Dark"), overlayGroups = c("Cantones"),
+                   options = layersControlOptions(collapsed = TRUE))%>% 
+  addMiniMap(toggleDisplay = TRUE, tiles = providers$Esri.WorldImagery, position = "bottomleft")
 m4
 ```
 
@@ -701,7 +688,7 @@ mutate(canton = factor(canton, levels = canton)) %>%
 top_n(n = 10, wt = fallecidos) %>%  
 plot_ly(x = ~ canton, y = ~ fallecidos, type = "bar", text = ~ fallecidos, textposition = 'auto',
         marker = list(color = color_fallecidos)) %>%
-layout(yaxis = list(title = "Cantidad de casos fallecidos"),
-       xaxis = list(title = "Cantones"),
-       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2))
+layout(yaxis = list(title = "Cantidad de casos fallecidos"), xaxis = list(title = "Cantones"),
+       margin = list(l = 10, r = 10, b = 10, t = 10, pad = 2)) %>%
+config(locale = "es")
 ```
