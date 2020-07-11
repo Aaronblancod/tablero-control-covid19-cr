@@ -8,6 +8,7 @@ library(dplyr)
 library(tidyr)
 library(sf)
 library(leaflet)
+library(leaflet.extras)
 
 #------------------- Heatmap Distritos -----------------------------------------
 #Ejemplo mapa
@@ -58,19 +59,14 @@ df_general_distritos_ultima_fecha <- df_general_distritos_sucio[-c(1:5), -c(1, 3
 # Cambio de nombre de las columnas
 df_general_distritos_ultima_fecha <- 
   df_general_distritos_ultima_fecha %>%
-  rename(provincia = X.1,
-         canton = X.3,
-         distrito = X.4,
-         positivos = X.5,
-         recuperados = X.6,
-         fallecidos = X.7,
-         activos = X.8
-  ) %>%  
-  mutate_all(funs(sub("^\\s*$", NA, .))) %>% # Se llenan con NA las celdas con espacios vacíos
+  rename(provincia = X.1, canton = X.3,  distrito = X.4,
+         positivos = X.5, recuperados = X.6, 
+         fallecidos = X.7, activos = X.8) %>%  
+  mutate_all(funs(sub("^\\s*$", NA, .))) %>% 
   mutate(distrito = if_else(distrito == "El Carmen", "Carmen", distrito)) %>%
   mutate(distrito = if_else(distrito == "Valle de La Estrella", "Valle La Estrella", distrito)) %>%
   mutate(distrito = if_else(distrito == "La Amistad", "La  Amistad", distrito)) %>%
-  fill(c(1,2)) # Se rellenan "hacia abajo" las columnas de provincia y cantón con valor NA
+  fill(c(1,2))
 # Borrado de las filas con valor de NA o de "Sin información de distrito" en la columna de distrito
 df_general_distritos_ultima_fecha <- df_general_distritos_ultima_fecha[!is.na(df_general_distritos_ultima_fecha$distrito), ]
 df_general_distritos_ultima_fecha <- df_general_distritos_ultima_fecha[df_general_distritos_ultima_fecha$distrito != 'Sin información de distrito', ]
@@ -83,8 +79,8 @@ df_general_distritos_ultima_fecha$activos <- as.integer(df_general_distritos_ult
 sf_distritos <- st_read('https://raw.githubusercontent.com/geoprocesamiento-2020i/datos/master/delimitacion-territorial-administrativa/cr/ign/cr_limite_distrital_ign_wgs84.geojson')
 # Objeto sf de casos positivos en distritos en la última fecha
 sf_general_distritos_ultima_fecha <-
-  left_join(sf_distritos, df_general_distritos_ultima_fecha, by = c('provincia', 'canton', 'distrito'))
-```
+left_join(sf_distritos, df_general_distritos_ultima_fecha, by = c('provincia', 'canton', 'distrito'))
+
 #------------------------------------- Mapa de calor -------------------------------------------------------
 paleta_azul <- colorBin(palette = "Blues", domain = sf_positivos_cantones_ultima_fecha$positivos, 
                         bins = 10)
@@ -115,28 +111,18 @@ heatmap <- leaflet(sf_general_distritos_ultima_fecha) %>%
   addWebGLHeatmap(lng=~long, lat=~lat, intensity = ~mag, size=60000)
 heatmap
 
-  
-#borrar
 
-# Data frame de casos positivos por cantón
-df_positivos_cantones_ancho <- read.csv(archivo_positivos_cantones, sep = caracter_separador)
-df_positivos_cantones <-
-  df_positivos_cantones_ancho %>%
-  pivot_longer(cols = c(-cod_provin, -provincia, -cod_canton, -canton), names_to = "fecha", values_to = "positivos")
-df_positivos_cantones$fecha <- as.Date(df_positivos_cantones$fecha, "X%d.%m.%Y")
+# mapaa
+sf_activos_distritos <- sf_general_distritos_ultima_fecha[, "activos"]
 
-# Data frame de casos positivos por cantón en la última fecha
-df_positivos_cantones_ultima_fecha <- 
-  df_positivos_cantones %>%
-  filter(fecha == max(fecha, na.rm = TRUE)) %>%
-  select(cod_canton, positivos)
+sf_activos_distritos_puntos <- st_cast(sf_activos_distritos$geometry, "MULTIPOINT")
 
-sf_cantones <-
-  st_read(paste0(url_base_wfs_ign_5mil, solicitud_wfs_ign_5mil_cantones)) %>%
-  st_simplify(dTolerance = 1000) %>%
-  st_transform(4326)
 
-# Objeto sf de casos positivos en cantones en la última fecha
-sf_positivos_cantones_ultima_fecha <-
-  left_join(sf_cantones, df_positivos_cantones_ultima_fecha, by = c('cod_canton')) %>%
-  arrange(desc(positivos))
+coordenadas <- do.call(rbind, st_geometry(sf_activos_distritos_puntos)) %>% 
+  as_tibble() %>% setNames(c("long","lat"))
+
+# Mapa web
+m5 <- leaflet(coordenadas) %>% 
+  addProviderTiles(providers$CartoDB.DarkMatter) %>%
+  addHeatmap( lng = ~long, lat = ~lat,  blur = 30, max = 0.005, radius = 12)
+m5

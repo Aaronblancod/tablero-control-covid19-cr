@@ -197,7 +197,7 @@ sf_general_distritos_ultima_fecha <-
 left_join(sf_distritos, df_general_distritos_ultima_fecha, by = c('provincia', 'canton', 'distrito'))
 
 #Heatmapa(apoyo de Carolina Guzmán)
-sf_activos_distritos <- sf_general_distritos_ultima_fecha[, "activos"]
+sf_activos_distritos <- sf_general_distritos_ultima_fecha[, c("activos", "distrito")]
 
 sf_activos_distritos_puntos <- st_cast(sf_activos_distritos$geometry, "MULTIPOINT")
 
@@ -743,7 +743,8 @@ Casos por distritos
 ### Mapa de calor de casos activos por distritos
 ```{r}
 m5 <- leaflet(coordenadas) %>% 
-  addProviderTiles(providers$CartoDB.DarkMatter) %>%
-  addHeatmap(lng = ~long, lat = ~lat,  blur = 35, max = 0.00100, radius = 12)
+      addProviderTiles(providers$CartoDB.DarkMatter) %>%
+      addHeatmap(lng = ~long, lat = ~lat,  blur = 30, max = 40, radius = 15)%>%
+      addMiniMap(toggleDisplay = TRUE, tiles = providers$Esri.WorldImagery, position = "bottomleft")
 m5
 ```
