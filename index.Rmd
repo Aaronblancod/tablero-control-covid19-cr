@@ -744,7 +744,6 @@ Casos por distritos
 ```{r}
 m5 <- leaflet(coordenadas) %>% 
   addProviderTiles(providers$CartoDB.DarkMatter) %>%
-  addHeatmap(lng = ~long, lat = ~lat,  blur = 35, max = 0.0099, radius = 12)
+  addHeatmap(lng = ~long, lat = ~lat,  blur = 35, max = 0.00100, radius = 12)
 m5
 ```
-
