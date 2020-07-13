@@ -126,3 +126,12 @@ m5 <- leaflet(coordenadas) %>%
   addProviderTiles(providers$CartoDB.DarkMatter) %>%
   addHeatmap( lng = ~long, lat = ~lat,  blur = 30, max = 0.005, radius = 12)
 m5
+
+
+
+sf_activos_distritos <- sf_general_distritos_ultima_fecha[, c("activos", "distrito")]
+
+sf_activos_distritos_puntos <- st_cast(sf_activos_distritos$geometry, "MULTIPOINT")
+
+coordenadas <- do.call(rbind, st_geometry(sf_activos_distritos_puntos)) %>% 
+  as_tibble() %>% setNames(c("long","lat"))

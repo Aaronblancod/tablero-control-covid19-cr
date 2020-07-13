@@ -302,6 +302,7 @@ plot_ly(data = df_general_pais, x = ~ FECHA, y = ~ positivos,  name = 'Positivos
 
 ### Tabla de cantidades de casos en cantones
 ```{r}
+#Ayuda de Carolina Guzmán.
 st_drop_geometry(sf_general_cantones) %>% 
 select(Provincia = provincia, Canton = canton, Positivos = positivos, Activos = activos, 
          Recuperados = recuperados, Fallecidos = fallecidos) %>%
@@ -742,6 +743,7 @@ Casos por distritos
 =======================================================================
 ### Mapa de calor de casos activos por distritos
 ```{r}
+#Mapa base: Carolina Guzmán.
 m5 <- leaflet(coordenadas) %>% 
       addProviderTiles(providers$CartoDB.DarkMatter) %>%
       addHeatmap(lng = ~long, lat = ~lat,  blur = 30, max = 40, radius = 15)%>%
